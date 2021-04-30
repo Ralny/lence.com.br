@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
-use App\Http\Livewire\DefaultCrud;
+use App\Http\Livewire\backend\DefaultCrud;
 
 /*
 |--------------------------------------------------------------------------
