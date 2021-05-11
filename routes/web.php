@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Livewire\backend\DefaultCrud;
+use App\Http\Livewire\backend\Apps\User\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,7 @@ use App\Http\Livewire\backend\DefaultCrud;
 Route::get('/', [PagesController::class,'index']);
 
 Route::get('/list', DefaultCrud::class);
+Route::get('/users', User::class);
 
 
 // Demo routes

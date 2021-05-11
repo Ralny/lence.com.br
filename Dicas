@@ -1,0 +1,102 @@
+# Alterar a Pasta padrão de Models
+url: https://kallbuloso.com.br/amaralkarl/alterar-o-diretorio-padrao-dos-models-no-laravel/#:~:text=A%20primeira%20coisa%20que%20voc%C3%AA,atualizar%20o%20namespace%20de%20acordo.
+1. Decidi então organizar meus models dentro do namespace App\Models alterando esse padrão.
+2. A primeira coisa que precisa fazer é criar, dentro diretório App um diretório com o nome Models.
+   Em seguida mover o model User.php para a pasta App/Models (o diretório recém criado) e atualizar o namespace de acordo.
+3. O primeiro é o próprio User.php. Altere o namespace App para namespace App\Models;
+4. O segundo é o auth.php dentro do diretório config de:
+         'providers' => [
+            'users' => [
+                'driver' => 'eloquent',
+                'model' => App\User::class,
+            ],
+    para:
+        'providers' => [
+            'users' => [
+                'driver' => 'eloquent',
+                'model' => App\Models\User::class,
+            ],
+5. O terceiro é o controller RegisterController.php dentro do diretório App\Http\Controllers\Auth de:
+
+        namespace App\Http\Controllers\Auth;
+
+        use App\User;
+        use App\Http\Controllers\Controller;
+
+    para:
+
+        namespace App\Http\Controllers\Auth;
+
+        use App\Models\User;
+        use App\Http\Controllers\Controller;
+
+6. Depois o arquivo services.php dentro do diretório config de:
+
+        'stripe' => [
+            'model' => App\User::class,
+            'key' => env('STRIPE_KEY'),
+            'secret' => env('STRIPE_SECRET'),
+        ],
+
+    para:
+
+        'stripe' => [
+            'model' => App\Models\User::class,
+            'key' => env('STRIPE_KEY'),
+            'secret' => env('STRIPE_SECRET'),
+        ],
+7. Por fim, o arquivo UserFactory.php dentro do diretório database/factories de:
+
+        $factory->define(App\User::class, function (Faker $faker) {
+            ...
+        });
+
+    para:
+
+        $factory->define(App\Models\User::class, function (Faker $faker) {
+            ...
+        });
+
+8. No terminal digite composer dumpautoloade clique “enter”.
+
+9. Mudamos o namespace do nosso Models\User, mas o que dizer de gerar novos models? Como sabemos, eles são colocados dentro do namespace App por padrão.
+Para corrigir isso, podemos estender o padrão ModelMakeCommand, agora vamos sobrescrever o caminho do diretório no comando Artisan make:model;
+
+        -- No terminal digite:  php artisan make:command ModelMakeCommand
+
+10. Dentro do diretório App\Console\Commands abra o arquivo ModelMakeCommand.php, apague seu conteúdo e digite (ou copie e cole) o seguinte código;
+
+<?php
+    namespace App\Console\Commands;
+
+    use Illuminate\Foundation\Console\ModelMakeCommand as Command;
+
+    class ModelMakeCommand extends Command
+    {
+        /**
+        * Get the default namespace for the class.
+        *
+        * @param  string  $rootNamespace
+        * @return string
+        */
+        protected function getDefaultNamespace($rootNamespace)
+        {
+            return "{$rootNamespace}\Models";
+        }
+    }
+
+
+11. Por fim registre-o no Kernel. Dentro do diretório App\Console abra o arquivo kernel.php,
+encontre o protected $commands e digite (ou copie e cole) o seguinte código;
+
+        /**
+        * The Artisan commands provided by your application.
+        *
+        * @var array
+        */
+        protected $commands = [
+            Commands\ModelMakeCommand::class
+        ];
+
+12. No terminal digite composer dumpautoload clique “enter”.
+
