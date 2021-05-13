@@ -54,7 +54,7 @@ class UserTableSeeder extends Seeder
 
     private function createUsers()
     {
-        User::factory(50)->create();
+        User::factory(30)->create();
 
         //Exibi uma informação no console durante o processo de seed
         $this->command->info('Users "fakes" created');
