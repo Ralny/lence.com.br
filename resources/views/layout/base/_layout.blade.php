@@ -4,7 +4,7 @@
     </div>
 @else
 
-    @include('layout.base._header-mobile')
+    {{-- @include('layout.base._header-mobile') --}}
 
     <div class="d-flex flex-column flex-root">
         <div class="d-flex flex-row flex-column-fluid page">
@@ -21,13 +21,14 @@
 
                     @if(config('layout.subheader.display'))
                         @if(array_key_exists(config('layout.subheader.layout'), config('layout.subheader.layouts')))
-                            @include('layout.partials.subheader._'.config('layout.subheader.layout'))
+                            {{-- @include('layout.partials.subheader._'.config('layout.subheader.layout')) --}}
                         @else
                             @include('layout.partials.subheader._'.array_key_first(config('layout.subheader.layouts')))
                         @endif
                     @endif
 
                     @include('layout.base._content')
+
                 </div>
 
                 @include('layout.base._footer')

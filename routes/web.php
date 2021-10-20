@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
-use App\Http\Livewire\backend\DefaultCrud;
-use App\Http\Livewire\backend\Apps\User\User;
+use App\Http\Livewire\Backend\Apps\User\UserForm;
+use App\Http\Livewire\Backend\Apps\User\UserList;
+use App\Http\Livewire\Backend\Apps\Financeiro\FinanceiroCategoriaReceita;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,24 +17,23 @@ use App\Http\Livewire\backend\Apps\User\User;
 |
 */
 
-// Demo routes Metronic
-Route::get('/', [PagesController::class,'index']);
-Route::get('/datatables', [PagesController::class,'datatables']);
-Route::get('/ktdatatables', [PagesController::class,'ktDatatables']);
-Route::get('/select2', [PagesController::class,'select2']);
-Route::get('/icons/custom-icons', [PagesController::class,'customIcons']);
-Route::get('/icons/flaticon', [PagesController::class,'flaticon']);
-Route::get('/icons/fontawesome', [PagesController::class,'fontawesome']);
-Route::get('/icons/lineawesome', [PagesController::class,'lineawesome']);
-Route::get('/icons/socicons', [PagesController::class,'socicons']);
-Route::get('/icons/svg', [PagesController::class,'svg']);
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/dashboard', 'PagesController@index')->name('dashboard');
+});
+
+// Demo routes
+Route::get('/datatables', 'PagesController@datatables');
+Route::get('/ktdatatables', 'PagesController@ktDatatables');
+Route::get('/select2', 'PagesController@select2');
+Route::get('/jquerymask', 'PagesController@jQueryMask');
+Route::get('/icons/custom-icons', 'PagesController@customIcons');
+Route::get('/icons/flaticon', 'PagesController@flaticon');
+Route::get('/icons/fontawesome', 'PagesController@fontawesome');
+Route::get('/icons/lineawesome', 'PagesController@lineawesome');
+Route::get('/icons/socicons', 'PagesController@socicons');
+Route::get('/icons/svg', 'PagesController@svg');
+
 // Quick search dummy route to display html elements in search dropdown (header search)
 Route::get('/quick-search', 'PagesController@quickSearch')->name('quick-search');
 
-
-//Routes
-Route::get('/list', DefaultCrud::class);
-Route::get('/users', User::class);
-Route::get('/users/cadastro', User::class,'add');
-
-
+require __DIR__.'/auth.php';

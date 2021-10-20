@@ -148,7 +148,8 @@ return [
             'fixed' => true,
             'minimize' => [
                 'toggle' => true, // allow toggle
-                'default' => false // default state
+                'default' => false, // default state
+                'hoverable' => true //allow hover
             ]
         ],
 
@@ -210,7 +211,7 @@ return [
         // User
         'user' => [
             'display' => true,
-            'layout' => 'offcanvas', // offcanvas, dropdown
+            'layout' => 'dropdown', // offcanvas, dropdown
             'dropdown' => [
                 'style' => 'dark' // light|dark
             ],

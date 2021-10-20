@@ -1,77 +1,106 @@
-{{--
-Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 4 & Angular 8
-Author: KeenThemes
-Website: http://www.keenthemes.com/
-Contact: support@keenthemes.com
-Follow: www.twitter.com/keenthemes
-Dribbble: www.dribbble.com/keenthemes
-Like: www.facebook.com/keenthemes
-Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-Renew Support: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
- --}}
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" {{ Metronic::printAttrs('html') }} {{ Metronic::printClasses('html') }}>
-    <head>
-        <meta charset="utf-8"/>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" {{ Metronic::printAttrs('html') }}
+    {{ Metronic::printClasses('html') }}>
 
-        {{-- Title Section --}}
-        <title>{{ config('app.name') }} | @yield('title', $page_title ?? '')</title>
+<head>
+    <meta charset="utf-8" />
 
-        {{-- Meta Data --}}
-        <meta name="description" content="@yield('page_description', $page_description ?? '')"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    {{-- Title Section --}}
+    <title>{{ config('app.name') }} | @yield('title', $page_title ?? '')</title>
 
-        {{-- Favicon --}}
-        <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
+    {{-- Meta Data --}}
+    <meta name="description" content="@yield('page_description', $page_description ?? '')" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-        {{-- Fonts --}}
-        {{ Metronic::getGoogleFontsInclude() }}
+    {{-- Favicon --}}
+    <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
 
-        {{-- Global Theme Styles (used by all pages) --}}
-        @foreach(config('layout.resources.css') as $style)
-            <link href="{{ config('layout.self.rtl') ? asset(Metronic::rtlCssPath($style)) : asset($style) }}" rel="stylesheet" type="text/css"/>
-        @endforeach
+    {{-- Fonts --}}
+    {{ Metronic::getGoogleFontsInclude() }}
 
-        {{-- Layout Themes (used by all pages) --}}
-        @foreach (Metronic::initThemes() as $theme)
-            <link href="{{ config('layout.self.rtl') ? asset(Metronic::rtlCssPath($theme)) : asset($theme) }}" rel="stylesheet" type="text/css"/>
-        @endforeach
+    {{-- Global Theme Styles (used by all pages) --}}
+    @foreach (config('layout.resources.css') as $style)
+        <link href="{{ config('layout.self.rtl') ? asset(Metronic::rtlCssPath($style)) : asset($style) }}"
+            rel="stylesheet" type="text/css" />
+    @endforeach
 
-        {{-- Includable CSS --}}
-        @yield('styles')
+    {{-- Layout Themes (used by all pages) --}}
+    @foreach (Metronic::initThemes() as $theme)
+        <link href="{{ config('layout.self.rtl') ? asset(Metronic::rtlCssPath($theme)) : asset($theme) }}"
+            rel="stylesheet" type="text/css" />
+    @endforeach
 
-        {{-- livewire Styles CSS --}}
-        @livewireStyles
+    {{-- Includable CSS --}}
+    @yield('styles')
 
-    </head>
+    {{-- livewire Styles CSS --}}
+    @livewireStyles
 
-    <body {{ Metronic::printAttrs('body') }} {{ Metronic::printClasses('body') }}>
+</head>
 
-        @if (config('layout.page-loader.type') != '')
-            @include('layout.partials._page-loader')
-        @endif
+<body {{ Metronic::printAttrs('body') }} {{ Metronic::printClasses('body') }}>
 
-        @include('layout.base._layout')
+    @if (config('layout.page-loader.type') != '')
+        @include('layout.partials._page-loader')
+    @endif
 
-        <script>var HOST_URL = "{{ route('quick-search') }}";</script>
+    @include('layout.base._layout')
 
-        {{-- Global Config (global config for global JS scripts) --}}
-        <script>
-            var KTAppSettings = {!! json_encode(config('layout.js'), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES) !!};
-        </script>
+    <script>
+        var HOST_URL = "{{ route('quick-search') }}";
+    </script>
 
-        {{-- Global Theme JS Bundle (used by all pages)  --}}
-        @foreach(config('layout.resources.js') as $script)
-            <script src="{{ asset($script) }}" type="text/javascript"></script>
-        @endforeach
+    {{-- Global Config (global config for global JS scripts) --}}
+    <script>
+        var KTAppSettings = {!! json_encode(config('layout.js'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!};
+    </script>
 
-        {{-- livewire Scripts JS --}}
-        @livewireScripts
+    {{-- Global Theme JS Bundle (used by all pages) --}}
+    @foreach (config('layout.resources.js') as $script)
+        <script src="{{ asset($script) }}" type="text/javascript"></script>
+    @endforeach
 
-        {{-- Includable JS --}}
-        @yield('scripts')
+    {{-- livewire Scripts JS --}}
+    @livewireScripts
 
-    </body>
+    {{-- Sweet2Alert2 - https://sweetalert2.github.io/ + https://livewire-alert.jantinnerezo.com --}}
+    <x-livewire-alert::scripts />
+    {{-- Pharaonic - https://pharaonic.io/package/3-livewire/27-select2 --}}
+    <x:pharaonic-select2::scripts />
+
+    <script>
+        window.addEventListener('show-form', event => {
+            $('#modalForm').modal('show');
+        });
+
+        window.addEventListener('hide-form', event => {
+            $('#modalForm').modal('hide');
+        });
+    </script>
+
+<script>
+    //Se você estiver renderizando um Select2 dentro de um modal (Bootstrap 3.x) que ainda não foi renderizado ou aberto,
+    //pode ser necessário vincular ao shown.bs.modal evento:
+
+    document.addEventListener('livewire:load', function() {
+
+        $('body').on('shown.bs.modal', '.modal', function() {
+            $(this).find('select').each(function() {
+                var dropdownParent = $(document.body);
+                if ($(this).parents('.modal.in:first').length !== 0)
+                    dropdownParent = $(this).parents('.modal.in:first');
+                $(this).select2({
+                    dropdownParent: dropdownParent
+                });
+            });
+        });
+
+    })
+</script>
+
+    {{-- Includable JS --}}
+    @yield('scripts')
+
+</body>
+
 </html>
-
